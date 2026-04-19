@@ -1,0 +1,228 @@
+# Implementation Plan: YtEduNotes Production Refactor
+
+## Overview
+
+Incrementally transform the existing JavaScript prototype into a production-ready TypeScript React application. Each task builds on the previous, ending with full integration. All tasks reference specific requirements for traceability.
+
+## Tasks
+
+- [x] 1. Project setup: TypeScript, dependencies, and config files
+  - Rename all `.jsx` → `.tsx` and `.js` → `.ts` in `src/` and project root
+  - Create `tsconfig.json` with `strict: true`, `jsx: "react-jsx"`, `moduleResolution: "bundler"`, `target: "ES2022"`
+  - Install dev dependencies: `typescript`, `vitest`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `fast-check`, `@types/node`, `jsdom`
+  - Install runtime dependencies: `sonner`, `clsx`, `tailwind-merge`, `class-variance-authority`, `lucide-react`, `@radix-ui/react-dialog`, `@radix-ui/react-tooltip`, `@radix-ui/react-drawer` (vaul), `@radix-ui/react-slot`
+  - Update `vite.config.ts`: add `test` config (vitest, jsdom), set `build.outDir: "dist"`, add `manualChunks` splitting React, ReactDOM, ReactRouter, Zustand, and jsPDF into separate vendor chunks
+  - Add `vitest.setup.ts` importing `@testing-library/jest-dom`
+  - _Requirements: 2.1, 2.3, 2.4, 11.2, 11.5, 16.5_
+
+- [x] 2. Types and design system foundation
+  - [x] 2.1 Create `src/types/index.ts` with `Note`, `ValidationResult`, `NoteStoreState`, `NoteStoreActions`, `NoteStore`, `ThemeStoreState`, `ThemeStoreActions`, `ThemeStore` interfaces
+    - _Requirements: 2.2, 2.5_
+  - [x] 2.2 Create `src/lib/utils.ts` with `cn()` helper using `clsx` + `tailwind-merge`
+    - _Requirements: 3.4_
+  - [x] 2.3 Replace `src/index.css` content with Tailwind v4 `@import "tailwindcss"` + `@theme` block defining all color, typography, spacing, border-radius, and transition tokens from the design document; add `dark` class strategy comment
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
+  - [x] 2.4 Update `index.html`: add FOUC-prevention inline `<script>` that reads `localStorage["ytedunotes-theme"]` and sets `document.documentElement.classList` before first paint; confirm `lang="en"` is present
+    - _Requirements: 4.2, 10.10_
+
+- [x] 3. Lib utilities
+  - [x] 3.1 Create `src/lib/youtube.ts` with `extractVideoId(url: string): string | null` (regex covering `watch?v=`, `youtu.be/`, `embed/`, extra query params) and `reconstructCanonicalUrl(videoId: string): string`
+    - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5, 15.6_
+  - [ ]* 3.2 Write unit tests for `lib/youtube.ts` in `src/lib/__tests__/youtube.test.ts`
+    - Test each URL format, null return for non-YouTube strings, extra query params
+    - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5_
+  - [ ]* 3.3 Write property test for YouTube URL round-trip
+    - **Property 1: YouTube URL Extraction Round-Trip**
+    - **Validates: Requirements 15.1, 15.2, 15.3, 15.6**
+  - [ ]* 3.4 Write property test for invalid URL returns null
+    - **Property 2: Invalid URL Returns Null**
+    - **Validates: Requirements 15.4**
+  - [x] 3.5 Create `src/lib/validate.ts` with `validateYouTubeUrl(url: string): ValidationResult` and `validateNoteTitle(title: string): ValidationResult`
+    - _Requirements: 8.1, 8.2, 8.3_
+  - [ ]* 3.6 Write unit tests for `lib/validate.ts` in `src/lib/__tests__/validate.test.ts`
+    - Test empty string, whitespace-only, valid URL, invalid URL, empty title
+    - _Requirements: 8.1, 8.2, 8.3_
+  - [x] 3.7 Create `src/lib/pdf.ts` with `async generatePDF(notes: Note[]): Promise<void>`
+    - Dynamic `import('jspdf')` inside the function body
+    - Early return with Sonner error toast when notes array is empty
+    - Per-page header with document title and page number
+    - `splitTextToSize` for description text wrapping
+    - Page overflow check before each note; insert `addPage()` when `y > safeMargin`
+    - Catch dynamic import failure and show error toast
+    - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5, 11.5_
+  - [ ]* 3.8 Write unit tests for `lib/pdf.ts` in `src/lib/__tests__/pdf.test.ts`
+    - Mock jsPDF constructor; test empty notes shows toast and no save; test header on page 1
+    - _Requirements: 14.4, 14.5_
+  - [ ]* 3.9 Write property test for PDF page overflow protection
+    - **Property 8: PDF Page Overflow Protection**
+    - **Validates: Requirements 14.1, 14.2**
+  - [ ]* 3.10 Write property test for PDF text wrapping within page width
+    - **Property 9: PDF Text Wrapping Within Page Width**
+    - **Validates: Requirements 14.3**
+  - [ ]* 3.11 Write property test for PDF header on every page
+    - **Property 10: PDF Header on Every Page**
+    - **Validates: Requirements 14.4**
+
+- [ ] 4. Checkpoint — Ensure all lib tests pass
+  - Run `vitest --run src/lib` and confirm all tests pass. Ask the user if questions arise.
+
+- [x] 5. Zustand stores
+  - [x] 5.1 Rewrite `src/store/useNotes.ts` using typed `StateCreator<NoteStore>`
+    - State: `url`, `videoId`, `player`, `notes`, `isLoadingNotes`
+    - Actions: `setUrl`, `setVideoId`, `setPlayer`, `addNote` (generates `id` via `crypto.randomUUID()`, sets `createdAt: Date.now()`, captures `player.getCurrentTime()` with null guard), `updateNote`, `deleteNote`, `seekTo` (null guard), `loadNotes` (try/catch with fallback to `[]`), `clearNotes`
+    - Call `loadNotes` once in the store initializer (not inside a component effect)
+    - Remove `generatePDF` and `videoIdExtractor` from the store (moved to lib)
+    - _Requirements: 2.5, 7.1, 7.4, 7.7, 12.1, 12.2_
+  - [ ]* 5.2 Write unit tests for `store/useNotes.ts` in `src/store/__tests__/useNotes.test.ts`
+    - Test `addNote`, `updateNote`, `deleteNote`, `loadNotes`, `clearNotes` with concrete examples
+    - _Requirements: 7.1, 7.4, 7.7_
+  - [ ]* 5.3 Write property test for note addition grows array
+    - **Property 3: Note Addition Grows the Notes Array**
+    - **Validates: Requirements 7.1**
+  - [ ]* 5.4 Write property test for note edit updates state and localStorage
+    - **Property 4: Note Edit Updates State and localStorage**
+    - **Validates: Requirements 7.4**
+  - [ ]* 5.5 Write property test for note deletion removes from state and localStorage
+    - **Property 5: Note Deletion Removes from State and localStorage**
+    - **Validates: Requirements 7.7**
+  - [x] 5.6 Create `src/store/useTheme.ts` using typed `StateCreator<ThemeStore>`
+    - State: `theme: 'light' | 'dark'`
+    - Actions: `toggleTheme`, `setTheme` — both persist to `localStorage["ytedunotes-theme"]` and toggle `dark` class on `document.documentElement`
+    - Initialize from `localStorage["ytedunotes-theme"]` falling back to `prefers-color-scheme`
+    - _Requirements: 4.1, 4.3, 4.5_
+  - [ ]* 5.7 Write unit tests for `store/useTheme.ts` in `src/store/__tests__/useTheme.test.ts`
+    - Test toggle switches theme, persists to localStorage, applies/removes `dark` class
+    - _Requirements: 4.1, 4.5_
+  - [ ]* 5.8 Write property test for theme persistence round-trip
+    - **Property 11: Theme Persistence Round-Trip**
+    - **Validates: Requirements 4.1, 4.5**
+
+- [x] 6. Custom hooks
+  - [x] 6.1 Create `src/hooks/useYouTubePlayer.ts`
+    - Inject YouTube IFrame API `<script>` tag once; set `window.onYouTubeIframeAPIReady`
+    - Construct `YT.Player` in the callback; store in `playerRef`
+    - Expose `{ playerRef, isReady }` — `isReady` flips to `true` in `onReady` event
+    - Catch script load error; expose `error` state for error UI
+    - _Requirements: 9.1, 9.2_
+  - [x] 6.2 Create `src/hooks/useLocalStorage.ts` — generic typed hook `useLocalStorage<T>(key, initialValue)`
+    - _Requirements: 2.2_
+
+- [x] 7. shadcn/ui primitive components
+  - Copy the following shadcn/ui component source files into `src/components/ui/`: `button.tsx`, `input.tsx`, `textarea.tsx`, `dialog.tsx`, `drawer.tsx` (vaul-based), `skeleton.tsx`, `tooltip.tsx`, `badge.tsx`, `sonner.tsx`
+  - Each file should use the `cn()` helper from `src/lib/utils.ts` and `class-variance-authority` where applicable
+  - Add `<Toaster />` from `sonner.tsx` to `App.tsx`
+  - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8_
+
+- [x] 8. App components
+  - [x] 8.1 Create `src/components/VideoPlayer.tsx`
+    - Wrap with `React.memo`
+    - Use `useYouTubePlayer` hook; pass `videoId` from `useNoteStore`
+    - Show `<Skeleton>` while `!isReady`; show error state with retry button on hook error
+    - Container `div` has `aria-label="YouTube video player"`
+    - Call `useNoteStore.setPlayer(playerRef.current)` once player is ready
+    - _Requirements: 9.1, 9.2, 10.3, 11.3_
+  - [ ]* 8.2 Write unit tests for `VideoPlayer.tsx`
+    - Test Skeleton shown before ready; iframe shown after ready
+    - _Requirements: 9.1, 9.2_
+  - [x] 8.3 Create `src/components/NoteForm.tsx`
+    - `<Input>` for title + `<Textarea>` for description + `<Button>` to add
+    - Inline validation via `validateNoteTitle`; show error message below input on failure
+    - Visual error state (red border) on title input when invalid
+    - `useCallback` on submit handler
+    - Show success toast on successful add
+    - _Requirements: 7.1, 8.3, 8.4, 8.6, 6.1, 6.2, 12.3_
+  - [ ]* 8.4 Write unit tests for `NoteForm.tsx`
+    - Test empty title shows inline error; valid submit calls `addNote`
+    - _Requirements: 8.3, 8.6_
+  - [x] 8.5 Create `src/components/NoteCard.tsx`
+    - Display title, `<Badge>` with formatted timestamp (`M:SS`), description
+    - Seek button, Edit button, Delete button — all with `aria-label` and wrapped in `<Tooltip>`
+    - Edit opens inline form pre-populated with current title/description
+    - Delete opens `<Dialog>` confirmation before calling `deleteNote`
+    - _Requirements: 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.9, 10.4_
+  - [ ]* 8.6 Write unit tests for `NoteCard.tsx`
+    - Test renders title, badge, buttons; delete opens dialog; edit opens inline form
+    - _Requirements: 7.3, 7.5, 7.6_
+  - [ ]* 8.7 Write property test for timestamp formatting correctness
+    - **Property 7: Timestamp Formatting Correctness**
+    - **Validates: Requirements 7.9**
+  - [x] 8.8 Create `src/components/NotesPanel.tsx`
+    - `useMemo` for notes sorted by timestamp ascending
+    - Show `<Skeleton>` placeholders while `isLoadingNotes` is true
+    - Render `<NoteForm>` + list of `<NoteCard>`
+    - Use Zustand selector pattern for `notes` and `isLoadingNotes`
+    - _Requirements: 7.8, 9.3, 11.4, 12.4_
+  - [ ]* 8.9 Write property test for notes sorted by timestamp ascending
+    - **Property 6: Notes Sorted by Timestamp Ascending**
+    - **Validates: Requirements 7.8**
+  - [x] 8.10 Create `src/components/Navbar.tsx`
+    - Logo/app name on left, nav links on right, theme toggle button (sun/moon icon)
+    - Theme toggle calls `useTheme().toggleTheme()`
+    - Mobile: hamburger button opens shadcn `<Drawer>` with nav links
+    - Remove `onResizerClick` prop entirely
+    - `<nav aria-label="Main navigation">`
+    - _Requirements: 1.5, 4.4, 4.6, 5.5, 10.2, 12.5, 17.4_
+  - [ ]* 8.11 Write unit tests for `Navbar.tsx`
+    - Test hamburger opens Drawer on mobile; theme toggle calls `toggleTheme`
+    - _Requirements: 1.5, 4.4_
+  - [x] 8.12 Create `src/components/Footer.tsx`
+    - Semantic `<footer>` element, `position: static`
+    - App name, description, contact info
+    - _Requirements: 1.6, 10.1, 17.5_
+
+- [ ] 9. Checkpoint — Ensure all component tests pass
+  - Run `vitest --run src/components` and confirm all tests pass. Ask the user if questions arise.
+
+- [x] 10. Pages and routing
+  - [x] 10.1 Rewrite `src/pages/Home.tsx`
+    - Hero section: app name, tagline, URL `<Input>` form centered on page
+    - Inline validation via `validateYouTubeUrl`; show error below input, red border on failure
+    - On valid submit: call `setUrl` + `setVideoId` from store, navigate to `/edunotes`
+    - No `alert()` calls — use Sonner toast for errors
+    - Visually distinct CTA button
+    - _Requirements: 1.2, 8.1, 8.2, 8.4, 8.5, 6.3, 17.1, 17.2_
+  - [ ]* 10.2 Write unit tests for `Home.tsx`
+    - Test empty URL shows inline error; valid URL navigates to `/edunotes`
+    - _Requirements: 8.1, 8.2_
+  - [ ]* 10.3 Write property test for invalid URL triggers inline validation error
+    - **Property 13: Invalid URL Triggers Inline Validation Error**
+    - **Validates: Requirements 8.2**
+  - [ ]* 10.4 Write property test for validation error clears on valid input
+    - **Property 12: Validation Error Clears on Valid Input**
+    - **Validates: Requirements 8.4**
+  - [x] 10.5 Rewrite `src/pages/EduNotes.tsx`
+    - Responsive two-column layout: stacked below `md`, side-by-side at `md` and above
+    - Render `<VideoPlayer>` and `<NotesPanel>`
+    - "Export PDF" button: calls `generatePDF(notes)`, shows loading spinner while in progress, disabled during export
+    - "Clear Notes" button: opens `<Dialog>` confirmation; on confirm calls `clearNotes()` and shows success toast
+    - _Requirements: 1.3, 1.4, 6.4, 6.5, 9.4, 14.1–14.5_
+  - [x] 10.6 Rewrite `src/main.tsx`
+    - Remove `lg:hidden` mobile block entirely
+    - Wrap `<App>` in `<ThemeProvider>` (or inline theme initialization)
+    - _Requirements: 1.1, 4.2_
+  - [x] 10.7 Rewrite `src/App.tsx`
+    - `React.lazy` + `Suspense` for both `Home` and `EduNotes` routes
+    - Skeleton fallback in `<Suspense>`
+    - Add `<Toaster />` from sonner
+    - _Requirements: 11.1_
+
+- [x] 11. Deployment configuration
+  - Create `public/_redirects` with content `/* /index.html 200`
+  - Create `render.yaml` at project root with static site service config (`buildCommand: "npm install && npm run build"`, `publishDir: "dist"`, `envVars` placeholder block)
+  - Update `README.md` with a "Deployment" section covering Render setup steps, environment variables, and manual deploy trigger
+  - _Requirements: 16.1, 16.2, 16.3, 16.4_
+
+- [x] 12. Final checkpoint — Full test suite and build verification
+  - Run `vitest --run` and confirm all tests pass
+  - Run `tsc --noEmit` and confirm zero type errors
+  - Run `vite build` and confirm `dist/` is produced, `_redirects` is present in `dist/`, and jsPDF is not in the initial chunk
+  - Ask the user if questions arise.
+
+## Notes
+
+- Tasks marked with `*` are optional and can be skipped for a faster MVP
+- Each task references specific requirements for traceability
+- Checkpoints ensure incremental validation at logical boundaries
+- Property tests validate universal correctness properties (Properties 1–13 from design.md)
+- Unit tests validate specific examples and edge cases
+- The `*` tasks MUST NOT be implemented automatically — they require explicit user opt-in
