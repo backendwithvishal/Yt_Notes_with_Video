@@ -30,7 +30,7 @@ const Navbar = ({ onResizerClick }) => {
                 <p className="cursor-pointer">About</p>
               </li>
               <button
-                onClick={() => window.open("https://github.com/deepakguptabca/YtEduNotes.git", "_blank")}
+                onClick={() => window.open("https://github.com/web-dev-vishal/Yt_Notes_with_Video", "_blank")}
                   className="text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-all"
                   style={{
                     background:
