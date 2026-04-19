@@ -5,7 +5,7 @@ import { Skeleton } from './ui/skeleton';
 import { Button } from './ui/button';
 
 const VideoPlayer = memo(function VideoPlayer() {
-  const videoId  = useNoteStore((s) => s.videoId);
+  const videoId   = useNoteStore((s) => s.videoId);
   const setPlayer = useNoteStore((s) => s.setPlayer);
 
   const { playerRef, isReady, error } = useYouTubePlayer({
@@ -38,12 +38,9 @@ const VideoPlayer = memo(function VideoPlayer() {
       style={{ aspectRatio: '16/9', backgroundColor: '#000' }}
       aria-label="YouTube video player"
     >
-      {/* Skeleton shown while player initialises */}
       {!isReady && (
         <Skeleton className="absolute inset-0 w-full h-full rounded-xl" />
       )}
-
-      {/* YouTube mounts here — must have explicit pixel dimensions */}
       <div
         ref={playerRef}
         className="absolute inset-0 w-full h-full"

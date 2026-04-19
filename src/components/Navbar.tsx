@@ -20,11 +20,7 @@ export default function Navbar() {
 
   return (
     <header
-      className="sticky top-0 z-50 w-full border-b backdrop-blur-md"
-      style={{
-        backgroundColor: 'color-mix(in oklch, var(--background) 85%, transparent)',
-        borderColor: 'var(--border)',
-      }}
+      className="sticky top-0 z-50 w-full border-b backdrop-blur-md bg-[color-mix(in_oklch,var(--background)_85%,transparent)] border-border"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -32,8 +28,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="font-bold text-xl tracking-tight transition-opacity hover:opacity-75"
-            style={{ color: 'var(--primary)' }}
+            className="font-bold text-xl tracking-tight transition-opacity hover:opacity-75 text-primary"
           >
             YtEduNotes
           </Link>

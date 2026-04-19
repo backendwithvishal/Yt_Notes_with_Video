@@ -47,18 +47,17 @@ export default function Home() {
 
         {/* Icon badge */}
         <div
-          className="flex items-center justify-center w-20 h-20 rounded-3xl shadow-lg"
-          style={{ background: 'linear-gradient(135deg, var(--primary) 0%, oklch(52% 0.20 260) 100%)' }}
+          className="flex items-center justify-center w-20 h-20 rounded-3xl shadow-lg bg-[linear-gradient(135deg,var(--primary)_0%,oklch(52%_0.20_260)_100%)]"
         >
           <BookOpen className="w-10 h-10 text-white" aria-hidden="true" />
         </div>
 
         {/* Headline */}
         <div className="flex flex-col gap-3">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight" style={{ color: 'var(--foreground)' }}>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
             YtEduNotes
           </h1>
-          <p className="text-lg max-w-md mx-auto leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+          <p className="text-lg max-w-md mx-auto leading-relaxed text-muted-foreground">
             Paste a YouTube link, watch it, and take timestamped notes — all in one place.
           </p>
         </div>
@@ -69,8 +68,7 @@ export default function Home() {
           <div className="flex gap-2 w-full">
             <div className="relative flex-1">
               <PlayCircle
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
-                style={{ color: 'var(--muted-foreground)' }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
                 aria-hidden="true"
               />
               <Input

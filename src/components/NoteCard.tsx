@@ -39,8 +39,7 @@ export default function NoteCard({ note }: NoteCardProps) {
 
   return (
     <article
-      className="rounded-xl border p-4 flex flex-col gap-2 transition-shadow duration-150 hover:shadow-md"
-      style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
+      className="rounded-xl border p-4 flex flex-col gap-2 transition-shadow duration-150 hover:shadow-md bg-card border-border"
     >
       {isEditing ? (
         <NoteForm
@@ -56,8 +55,7 @@ export default function NoteCard({ note }: NoteCardProps) {
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 flex-wrap min-w-0">
               <h3
-                className="font-semibold text-sm leading-snug truncate"
-                style={{ color: 'var(--foreground)' }}
+                className="font-semibold text-sm leading-snug truncate text-foreground"
               >
                 {note.title}
               </h3>
@@ -98,7 +96,7 @@ export default function NoteCard({ note }: NoteCardProps) {
                     size="icon"
                     aria-label="Delete note"
                     onClick={() => setShowDeleteDialog(true)}
-                    style={{ color: 'var(--destructive)' }}
+                    className="text-destructive"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </Button>
@@ -110,7 +108,7 @@ export default function NoteCard({ note }: NoteCardProps) {
 
           {/* Description */}
           {note.description && (
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+            <p className="text-sm leading-relaxed text-muted-foreground">
               {note.description}
             </p>
           )}
