@@ -1,17 +1,32 @@
-import { memo } from 'react';
+import { memo, useRef, useState } from 'react';
 import { useYouTubePlayer } from '../hooks/useYouTubePlayer';
 import { useNoteStore } from '../store/useNotes';
 import { Skeleton } from './ui/skeleton';
 import { Button } from './ui/button';
+import VideoControls from './VideoControls';
 
-const VideoPlayer = memo(function VideoPlayer() {
+interface VideoPlayerProps {
+  onTheatreToggle?: (enabled: boolean) => void;
+}
+
+const VideoPlayer = memo(function VideoPlayer({ onTheatreToggle }: VideoPlayerProps) {
   const videoId   = useNoteStore((s) => s.videoId);
   const setPlayer = useNoteStore((s) => s.setPlayer);
 
-  const { playerRef, isReady, error } = useYouTubePlayer({
+  // Ref for the outer container — used for fullscreen
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { playerRef, playerInstanceRef, isReady, error, retry } = useYouTubePlayer({
     videoId,
     onReady: (player) => setPlayer(player),
   });
+
+  const [theatreMode, setTheatreMode] = useState(false);
+
+  const handleTheatreToggle = (enabled: boolean) => {
+    setTheatreMode(enabled);
+    onTheatreToggle?.(enabled);
+  };
 
   if (error) {
     return (
@@ -25,7 +40,7 @@ const VideoPlayer = memo(function VideoPlayer() {
         role="alert"
       >
         <p className="text-sm mb-3" style={{ color: 'var(--destructive)' }}>{error}</p>
-        <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+        <Button variant="outline" size="sm" onClick={retry}>
           Retry
         </Button>
       </div>
@@ -34,18 +49,31 @@ const VideoPlayer = memo(function VideoPlayer() {
 
   return (
     <div
-      className="relative w-full rounded-xl overflow-hidden shadow-lg"
+      ref={containerRef}
+      className="relative w-full rounded-xl overflow-hidden shadow-lg group"
       style={{ aspectRatio: '16/9', backgroundColor: '#000' }}
       aria-label="YouTube video player"
     >
+      {/* Skeleton shown only while player is initialising */}
       {!isReady && (
-        <Skeleton className="absolute inset-0 w-full h-full rounded-xl" />
+        <Skeleton className="absolute inset-0 w-full h-full rounded-xl z-10" />
       )}
+
+      {/* Player mount point — always visible so YT API can attach the iframe */}
       <div
         ref={playerRef}
         className="absolute inset-0 w-full h-full"
-        style={{ opacity: isReady ? 1 : 0, transition: 'opacity 0.3s ease' }}
       />
+
+      {/* Custom control bar — rendered once player is ready */}
+      {isReady && (
+        <VideoControls
+          playerRef={playerInstanceRef}
+          containerRef={containerRef}
+          onTheatreToggle={handleTheatreToggle}
+          theatreMode={theatreMode}
+        />
+      )}
     </div>
   );
 });

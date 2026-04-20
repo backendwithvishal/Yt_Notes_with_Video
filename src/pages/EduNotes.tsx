@@ -20,6 +20,7 @@ export default function EduNotes() {
 
   const [isExporting, setIsExporting]       = useState(false);
   const [showClearDialog, setShowClearDialog] = useState(false);
+  const [theatreMode, setTheatreMode]         = useState(false);
 
   // Redirect to home if no video selected
   useEffect(() => {
@@ -75,21 +76,23 @@ export default function EduNotes() {
         </div>
 
         {/* ── Two-column layout ── */}
-        {/* On mobile: video on top, notes below (scrollable page)       */}
-        {/* On md+: side-by-side, both fill remaining viewport height    */}
+        {/* Theatre mode: video takes full width, notes panel hidden        */}
+        {/* Normal mode: 60/40 split on desktop, stacked on mobile          */}
         <div className="flex flex-col md:flex-row gap-4 flex-1 min-h-0">
 
-          {/* Video column — 60% on desktop */}
-          <div className="w-full md:w-3/5 shrink-0">
-            <VideoPlayer />
+          {/* Video column */}
+          <div className={theatreMode ? 'w-full' : 'w-full md:w-3/5 shrink-0'}>
+            <VideoPlayer onTheatreToggle={setTheatreMode} />
           </div>
 
-          {/* Notes column — 40% on desktop, scrollable */}
-          <div
-            className="w-full md:w-2/5 flex flex-col min-h-0 max-h-[calc(100vh-140px)]"
-          >
-            <NotesPanel />
-          </div>
+          {/* Notes column — hidden in theatre mode */}
+          {!theatreMode && (
+            <div
+              className="w-full md:w-2/5 flex flex-col min-h-0 max-h-[calc(100vh-140px)]"
+            >
+              <NotesPanel />
+            </div>
+          )}
 
         </div>
       </main>

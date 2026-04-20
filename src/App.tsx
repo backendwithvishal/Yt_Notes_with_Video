@@ -9,6 +9,9 @@ import { TooltipProvider } from './components/ui/tooltip';
 
 const Home = lazy(() => import('./pages/Home'));
 const EduNotes = lazy(() => import('./pages/EduNotes'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Pricing = lazy(() => import('./pages/Pricing'));
 
 function PageSkeleton() {
   return (
@@ -32,6 +35,9 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/edunotes" element={<EduNotes />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/pricing" element={<Pricing />} />
               </Routes>
             </Suspense>
             <Footer />

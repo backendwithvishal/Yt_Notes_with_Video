@@ -101,6 +101,7 @@ body {
   color: var(--foreground);
   transition: background-color 200ms ease, color 200ms ease;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 :focus-visible {

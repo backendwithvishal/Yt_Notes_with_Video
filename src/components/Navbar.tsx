@@ -8,8 +8,10 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose } from '.
 import { cn } from '../lib/utils';
 
 const navLinks = [
-  { label: 'Home',  to: '/'      },
-  { label: 'About', to: '/about' },
+  { label: 'Home',    to: '/'        },
+  { label: 'Pricing', to: '/pricing' },
+  { label: 'Contact', to: '/contact' },
+  { label: 'About',   to: '/about'   },
 ];
 
 export default function Navbar() {
