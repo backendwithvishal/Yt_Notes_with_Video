@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, MapPin, Send, CheckCircle2, AlertCircle, Sparkles, MessageSquare, Clock } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, AlertCircle, Sparkles, MessageSquare, Clock, Copy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
@@ -149,18 +149,37 @@ export default function Contact() {
               </div>
 
               <div className="space-y-4 text-xs sm:text-sm">
-                <div className="flex items-start gap-3 p-3 rounded-xl border" style={{ backgroundColor: 'var(--bg-surface-2)', borderColor: 'var(--border-subtle)' }}>
-                  <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--accent-violet)' }} />
-                  <div>
-                    <p className="font-mono text-[11px] font-semibold uppercase text-purple-400">Email Address</p>
-                    <a
-                      href="mailto:vishalsanam83@gmail.com"
-                      className="font-medium hover:underline text-xs sm:text-sm"
-                      style={{ color: 'var(--text-primary)' }}
-                    >
-                      vishalsanam83@gmail.com
-                    </a>
+                <div className="flex items-start justify-between gap-3 p-3 rounded-xl border" style={{ backgroundColor: 'var(--bg-surface-2)', borderColor: 'var(--border-subtle)' }}>
+                  <div className="flex items-start gap-3">
+                    <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--accent-violet)' }} />
+                    <div>
+                      <p className="font-mono text-[11px] font-semibold uppercase text-purple-400">Email Address</p>
+                      <a
+                        href="mailto:vishalsanam83@gmail.com"
+                        className="font-medium hover:underline text-xs sm:text-sm"
+                        style={{ color: 'var(--text-primary)' }}
+                      >
+                        vishalsanam83@gmail.com
+                      </a>
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText('vishalsanam83@gmail.com');
+                      toast.success('Email address copied to clipboard!');
+                    }}
+                    className="p-1.5 rounded-lg border text-xs transition-all hover:scale-105 cursor-pointer ml-auto shrink-0"
+                    style={{
+                      backgroundColor: 'var(--bg-surface)',
+                      borderColor: 'var(--border-subtle)',
+                      color: 'var(--text-secondary)',
+                    }}
+                    title="Copy email address"
+                    aria-label="Copy email address"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                  </button>
                 </div>
 
                 <div className="flex items-start gap-3 p-3 rounded-xl border" style={{ backgroundColor: 'var(--bg-surface-2)', borderColor: 'var(--border-subtle)' }}>
