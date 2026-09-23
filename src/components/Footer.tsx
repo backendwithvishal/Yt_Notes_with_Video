@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // Inline SVG social icons (lucide-react v1.8 doesn't include brand icons)
@@ -46,91 +46,107 @@ const socialLinks = [
   { label: 'YouTube',   href: 'https://www.youtube.com/',   Icon: YouTubeIcon   },
 ];
 
+const quickLinks = [
+  { label: 'Home',    to: '/'        },
+  { label: 'About',   to: '/about'   },
+  { label: 'Pricing', to: '/pricing' },
+  { label: 'Contact', to: '/contact' },
+];
+
 export default function Footer() {
   return (
     <footer
-      className="w-full border-t mt-auto py-10 px-6 md:px-20"
+      className="w-full border-t mt-auto theme-transition"
       style={{
-        backgroundColor: 'var(--card)',
+        backgroundColor: 'var(--surface)',
         borderColor: 'var(--border)',
-        color: 'var(--foreground)',
       }}
     >
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-10">
 
-        {/* Branding */}
-        <div className="flex flex-col gap-3 max-w-xs">
-          <p className="font-bold text-xl" style={{ color: 'var(--primary)' }}>
-            YtEduNotes
-          </p>
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-            Take timestamped notes while watching YouTube videos. Paste a link and start learning.
-          </p>
+          {/* Branding */}
+          <div className="flex flex-col gap-3 max-w-xs">
+            <p className="font-semibold text-base" style={{ color: 'var(--foreground)' }}>
+              YtEduNotes
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+              Take timestamped notes while watching YouTube videos. Paste a link and start learning.
+            </p>
 
-          {/* Social icons */}
-          <div className="flex items-center gap-3 mt-1">
-            {socialLinks.map(({ label, href, Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="transition-opacity hover:opacity-70"
-                style={{ color: 'var(--muted-foreground)' }}
-              >
-                <Icon className="w-5 h-5" />
-              </a>
-            ))}
+            {/* Social icons */}
+            <div className="flex items-center gap-3 mt-1">
+              {socialLinks.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="transition-opacity hover:opacity-60"
+                  style={{ color: 'var(--muted-foreground)' }}
+                >
+                  <Icon className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-10">
+            {/* Quick links */}
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: 'var(--muted-foreground)' }}>
+                Navigation
+              </h4>
+              <ul className="space-y-2 text-sm">
+                {quickLinks.map(({ label, to }) => (
+                  <li key={to}>
+                    <Link
+                      to={to}
+                      className="transition-colors hover:opacity-80"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: 'var(--muted-foreground)' }}>
+                Contact
+              </h4>
+              <ul className="space-y-2.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>
+                <li className="flex items-center gap-2">
+                  <Mail className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  <a
+                    href="mailto:vishalsanam83@gmail.com"
+                    className="hover:underline"
+                    style={{ color: 'var(--foreground)' }}
+                  >
+                    vishalsanam83@gmail.com
+                  </a>
+                </li>
+                <li className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  <span>Thane, Maharashtra, India</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Contact */}
-        <div>
-          <h4 className="text-sm font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
-            Get in Touch
-          </h4>
-          <ul className="space-y-3 text-sm" style={{ color: 'var(--muted-foreground)' }}>
-            <li className="flex items-center gap-2">
-              <Phone className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span>+91 98765 43210</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <Mail className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <a
-                href="mailto:vishalsanam83@gmail.com"
-                className="hover:underline transition-opacity hover:opacity-80"
-                style={{ color: 'var(--primary)' }}
-              >
-                vishalsanam83@gmail.com
-              </a>
-            </li>
-            <li className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span>Thane, Maharashtra, India</span>
-            </li>
-          </ul>
+        <div
+          className="mt-8 pt-6 border-t text-xs"
+          style={{ borderColor: 'var(--border)', color: 'var(--muted-foreground)' }}
+        >
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>© {new Date().getFullYear()} YtEduNotes. All rights reserved.</span>
+            <span>Built with React · Tailwind CSS · Vite</span>
+          </div>
         </div>
-
-        {/* Quick links */}
-        <div>
-          <h4 className="text-sm font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
-            Quick Links
-          </h4>
-          <ul className="space-y-2 text-sm" style={{ color: 'var(--muted-foreground)' }}>
-            <li><Link to="/" className="hover:underline hover:opacity-80 transition-opacity">Home</Link></li>
-            <li><Link to="/about" className="hover:underline hover:opacity-80 transition-opacity">About</Link></li>
-            <li><Link to="/pricing" className="hover:underline hover:opacity-80 transition-opacity">Pricing</Link></li>
-            <li><Link to="/contact" className="hover:underline hover:opacity-80 transition-opacity">Contact</Link></li>
-          </ul>
-        </div>
-      </div>
-
-      <div
-        className="max-w-7xl mx-auto mt-8 pt-6 border-t text-xs text-center"
-        style={{ borderColor: 'var(--border)', color: 'var(--muted-foreground)' }}
-      >
-        © {new Date().getFullYear()} YtEduNotes. All rights reserved.
       </div>
     </footer>
   );

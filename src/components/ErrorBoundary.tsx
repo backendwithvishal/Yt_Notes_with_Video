@@ -26,12 +26,20 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-4">
-          <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
-          <p className="text-muted-foreground mb-4">
-            Please refresh the page to try again.
+        <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+          <div
+            className="flex items-center justify-center w-12 h-12 rounded-full mb-4"
+            style={{ backgroundColor: 'var(--muted)' }}
+          >
+            <span className="text-2xl" aria-hidden="true">⚠</span>
+          </div>
+          <h1 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
+            Something went wrong
+          </h1>
+          <p className="text-sm mb-6 max-w-sm" style={{ color: 'var(--muted-foreground)' }}>
+            An unexpected error occurred. Please refresh the page to try again.
           </p>
-          <Button onClick={() => window.location.reload()}>
+          <Button size="sm" onClick={() => window.location.reload()}>
             Refresh Page
           </Button>
         </div>

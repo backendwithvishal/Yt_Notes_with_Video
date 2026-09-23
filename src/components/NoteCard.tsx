@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Pencil, Trash2, Play } from 'lucide-react';
+import { Pencil, Trash2, Clock } from 'lucide-react';
 import type { Note } from '../types';
 import { useNoteStore } from '../store/useNotes';
 import { formatTimestamp } from '../lib/utils';
-import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import {
@@ -39,7 +38,8 @@ export default function NoteCard({ note }: NoteCardProps) {
 
   return (
     <article
-      className="rounded-xl border p-4 flex flex-col gap-2 transition-shadow duration-150 hover:shadow-md bg-card border-border"
+      className="rounded-lg border p-3.5 flex flex-col gap-2 transition-shadow duration-150 hover:shadow-sm"
+      style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
     >
       {isEditing ? (
         <NoteForm
@@ -51,39 +51,37 @@ export default function NoteCard({ note }: NoteCardProps) {
         />
       ) : (
         <>
-          {/* Title row */}
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex items-center gap-2 flex-wrap min-w-0">
-              <h3
-                className="font-semibold text-sm leading-snug truncate text-foreground"
-              >
-                {note.title}
-              </h3>
-              <Badge
-                variant="secondary"
-                className="cursor-pointer shrink-0 select-none"
-                onClick={handleSeek}
-                title="Seek to this timestamp"
-              >
-                ⏱ {formatTimestamp(note.timestamp)}
-              </Badge>
-            </div>
+          {/* Header row: timestamp + actions */}
+          <div className="flex items-center justify-between gap-2">
+            {/* Timestamp — clickable to seek */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={handleSeek}
+                  className="flex items-center gap-1 text-xs font-medium transition-colors hover:opacity-70 cursor-pointer"
+                  style={{ color: 'var(--primary)' }}
+                  aria-label={`Seek to ${formatTimestamp(note.timestamp)}`}
+                >
+                  <Clock className="w-3 h-3 shrink-0" aria-hidden="true" />
+                  {formatTimestamp(note.timestamp)}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Seek to {formatTimestamp(note.timestamp)}</TooltipContent>
+            </Tooltip>
 
             {/* Action buttons */}
-            <div className="flex items-center gap-0.5 shrink-0">
+            <div className="flex items-center gap-0 shrink-0">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Seek to timestamp" onClick={handleSeek}>
-                    <Play className="w-3.5 h-3.5" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Seek to {formatTimestamp(note.timestamp)}</TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Edit note" onClick={() => setIsEditing(true)}>
-                    <Pencil className="w-3.5 h-3.5" />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Edit note"
+                    onClick={() => setIsEditing(true)}
+                    className="h-7 w-7"
+                  >
+                    <Pencil className="w-3 h-3" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>Edit</TooltipContent>
@@ -96,9 +94,9 @@ export default function NoteCard({ note }: NoteCardProps) {
                     size="icon"
                     aria-label="Delete note"
                     onClick={() => setShowDeleteDialog(true)}
-                    className="text-destructive"
+                    className="h-7 w-7 text-destructive hover:text-destructive"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-3 h-3" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>Delete</TooltipContent>
@@ -106,9 +104,14 @@ export default function NoteCard({ note }: NoteCardProps) {
             </div>
           </div>
 
+          {/* Title */}
+          <h3 className="font-medium text-sm leading-snug" style={{ color: 'var(--foreground)' }}>
+            {note.title}
+          </h3>
+
           {/* Description */}
           {note.description && (
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
               {note.description}
             </p>
           )}
@@ -125,8 +128,8 @@ export default function NoteCard({ note }: NoteCardProps) {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+            <Button variant="outline" size="sm" onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
+            <Button variant="destructive" size="sm" onClick={handleDelete}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

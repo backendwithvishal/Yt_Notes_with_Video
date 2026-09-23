@@ -66,62 +66,64 @@ const keyFeatures = [
 export default function About() {
   return (
     <main className="flex-1 overflow-x-hidden">
-      <div className="max-w-4xl mx-auto px-4 py-12 flex flex-col gap-16">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 flex flex-col gap-14">
 
         {/* ── Project Overview ── */}
         <section aria-labelledby="overview-heading">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-5">
             <div
-              className="flex items-center justify-center w-10 h-10 rounded-xl shadow"
-              style={{ background: 'linear-gradient(135deg, var(--primary) 0%, oklch(52% 0.20 260) 100%)' }}
+              className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
+              style={{ backgroundColor: 'var(--accent)' }}
             >
-              <BookOpen className="w-5 h-5 text-white" aria-hidden="true" />
+              <BookOpen className="w-4 h-4" style={{ color: 'var(--primary)' }} aria-hidden="true" />
             </div>
             <h1
               id="overview-heading"
-              className="text-2xl font-bold"
+              className="text-xl font-semibold"
               style={{ color: 'var(--foreground)' }}
             >
               Project Overview
             </h1>
           </div>
-          <p className="text-base leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-            <strong style={{ color: 'var(--foreground)' }}>YtEduNotes</strong> is a focused study tool that
-            combines YouTube video playback with a real-time note-taking panel. The idea is simple: instead of
-            pausing a video, switching to a notes app, typing something, and switching back — you do it all in
-            one place. Paste a YouTube link, watch the video, and add timestamped notes as you go. When you're
-            done, export everything to a PDF.
-          </p>
-          <p className="text-base leading-relaxed mt-3" style={{ color: 'var(--muted-foreground)' }}>
-            Built for students, self-learners, and anyone who watches educational content and wants to retain
-            more of what they learn.
-          </p>
+          <div className="pl-11">
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+              <strong style={{ color: 'var(--foreground)' }}>YtEduNotes</strong> is a focused study tool that
+              combines YouTube video playback with a real-time note-taking panel. The idea is simple: instead of
+              pausing a video, switching to a notes app, typing something, and switching back — you do it all in
+              one place. Paste a YouTube link, watch the video, and add timestamped notes as you go. When you're
+              done, export everything to a PDF.
+            </p>
+            <p className="text-sm leading-relaxed mt-3" style={{ color: 'var(--muted-foreground)' }}>
+              Built for students, self-learners, and anyone who watches educational content and wants to retain
+              more of what they learn.
+            </p>
+          </div>
         </section>
 
         {/* ── Key Features ── */}
         <section aria-labelledby="features-heading">
           <h2
             id="features-heading"
-            className="text-2xl font-bold mb-6"
+            className="text-xl font-semibold mb-6"
             style={{ color: 'var(--foreground)' }}
           >
             Key Features
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {keyFeatures.map(({ icon: Icon, title, desc }) => (
               <div
                 key={title}
-                className="flex gap-4 p-5 rounded-xl border"
+                className="flex gap-4 p-4 rounded-lg border"
                 style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
               >
                 <div
-                  className="flex items-center justify-center w-9 h-9 rounded-lg shrink-0"
+                  className="flex items-center justify-center w-8 h-8 rounded-md shrink-0 mt-0.5"
                   style={{ backgroundColor: 'var(--accent)' }}
                 >
                   <Icon className="w-4 h-4" style={{ color: 'var(--primary)' }} aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm mb-1" style={{ color: 'var(--foreground)' }}>
+                  <h3 className="font-medium text-sm mb-1" style={{ color: 'var(--foreground)' }}>
                     {title}
                   </h3>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
@@ -137,68 +139,68 @@ export default function About() {
         <section aria-labelledby="tech-heading">
           <h2
             id="tech-heading"
-            className="text-2xl font-bold mb-6"
+            className="text-xl font-semibold mb-6"
             style={{ color: 'var(--foreground)' }}
           >
             Tech Stack
           </h2>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {techStack.map(({ name, desc }) => (
               <div
                 key={name}
-                className="flex flex-col px-4 py-3 rounded-xl border text-sm"
-                style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
+                className="flex flex-col px-3 py-2.5 rounded-lg border text-sm"
+                style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}
               >
-                <span className="font-semibold" style={{ color: 'var(--foreground)' }}>{name}</span>
+                <span className="font-medium text-xs" style={{ color: 'var(--foreground)' }}>{name}</span>
                 <span className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{desc}</span>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ── Team / Creator ── */}
+        {/* ── Creator ── */}
         <section aria-labelledby="creator-heading">
           <h2
             id="creator-heading"
-            className="text-2xl font-bold mb-6"
+            className="text-xl font-semibold mb-6"
             style={{ color: 'var(--foreground)' }}
           >
             Creator
           </h2>
           <div
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-5 p-6 rounded-xl border"
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-5 p-5 rounded-lg border"
             style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
           >
             {/* Avatar */}
             <div
-              className="flex items-center justify-center w-16 h-16 rounded-full text-2xl font-bold shrink-0"
+              className="flex items-center justify-center w-12 h-12 rounded-full text-base font-semibold shrink-0"
               style={{ backgroundColor: 'var(--accent)', color: 'var(--primary)' }}
               aria-hidden="true"
             >
               V
             </div>
             <div className="flex flex-col gap-1 flex-1">
-              <p className="font-semibold text-lg" style={{ color: 'var(--foreground)' }}>
+              <p className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>
                 Vishal
               </p>
-              <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
+              <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
                 Frontend Developer · Thane, Maharashtra, India
               </p>
-              <p className="text-sm mt-1 leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+              <p className="text-sm mt-1.5 leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
                 Passionate about building tools that make learning more effective. YtEduNotes was built to
                 solve a personal frustration — constantly switching between YouTube and a notes app while
                 studying.
               </p>
-              <div className="flex items-center gap-3 mt-3">
+              <div className="flex items-center gap-4 mt-3">
                 <a
                   href="https://github.com/web-dev-vishal/Yt_Notes_with_Video"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub repository"
-                  className="flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
+                  className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-70"
                   style={{ color: 'var(--primary)' }}
                 >
-                  <GitHubIcon className="w-4 h-4" />
+                  <GitHubIcon className="w-3.5 h-3.5" />
                   GitHub
                   <ExternalLink className="w-3 h-3" aria-hidden="true" />
                 </a>
@@ -207,10 +209,10 @@ export default function About() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn profile"
-                  className="flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
+                  className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-70"
                   style={{ color: 'var(--primary)' }}
                 >
-                  <LinkedInIcon className="w-4 h-4" />
+                  <LinkedInIcon className="w-3.5 h-3.5" />
                   LinkedIn
                   <ExternalLink className="w-3 h-3" aria-hidden="true" />
                 </a>

@@ -63,10 +63,10 @@ export default function NoteForm({
   );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2.5" noValidate>
       <div className="flex flex-col gap-1">
-        <label htmlFor={titleId} className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-          Title <span aria-hidden="true" className="text-error-500">*</span>
+        <label htmlFor={titleId} className="text-xs font-medium" style={{ color: 'var(--foreground)' }}>
+          Title <span aria-hidden="true" style={{ color: 'var(--destructive)' }}>*</span>
         </label>
         <Input
           id={titleId}
@@ -76,17 +76,20 @@ export default function NoteForm({
           aria-required="true"
           aria-invalid={!!titleError}
           aria-describedby={titleError ? titleErrorId : undefined}
-          className={cn(titleError && 'border-error-500 focus-visible:ring-error-500')}
+          className={cn(
+            'h-8 text-xs',
+            titleError && 'border-red-500 focus-visible:ring-red-500'
+          )}
         />
         {titleError && (
-          <p id={titleErrorId} role="alert" className="text-xs text-error-500">
+          <p id={titleErrorId} role="alert" className="text-xs" style={{ color: 'var(--destructive)' }}>
             {titleError}
           </p>
         )}
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor={descId} className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+        <label htmlFor={descId} className="text-xs font-medium" style={{ color: 'var(--foreground)' }}>
           Description
         </label>
         <Textarea
@@ -94,17 +97,18 @@ export default function NoteForm({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Add details (optional)"
-          rows={3}
+          rows={2}
+          className="text-xs"
         />
       </div>
 
       <div className="flex gap-2 justify-end">
         {isEditing && onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" size="sm" onClick={onCancel} className="h-7 px-3 text-xs font-normal">
             Cancel
           </Button>
         )}
-        <Button type="submit">
+        <Button type="submit" size="sm" className="h-7 px-3 text-xs font-normal">
           {isEditing ? 'Save' : 'Add Note'}
         </Button>
       </div>

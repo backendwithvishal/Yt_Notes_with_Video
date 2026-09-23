@@ -87,7 +87,11 @@ describe('Bug Condition Exploration Tests', () => {
   // ── Bug 6a: Footer should show "Thane, Maharashtra" ─────────────────────
   it('Bug 6a — Footer should display "Thane, Maharashtra" address', async () => {
     const { default: Footer } = await import('../components/Footer');
-    render(<Footer />);
+    render(
+      <MemoryRouter>
+        <Footer />
+      </MemoryRouter>
+    );
     expect(screen.getByText(/Thane, Maharashtra/i)).toBeTruthy();
     expect(screen.queryByText(/Gurgaon/i)).toBeNull();
   });
@@ -95,7 +99,11 @@ describe('Bug Condition Exploration Tests', () => {
   // ── Bug 6b: Footer should have 4 social icon links ───────────────────────
   it('Bug 6b — Footer should render 4 social media links', async () => {
     const { default: Footer } = await import('../components/Footer');
-    render(<Footer />);
+    render(
+      <MemoryRouter>
+        <Footer />
+      </MemoryRouter>
+    );
     const socialLabels = ['Instagram', 'Twitter', 'LinkedIn', 'YouTube'];
     const found = socialLabels.filter((label) =>
       screen.queryByRole('link', { name: new RegExp(label, 'i') })

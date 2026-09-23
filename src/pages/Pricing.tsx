@@ -53,26 +53,26 @@ const plans = [
 export default function Pricing() {
   return (
     <main className="flex-1 overflow-x-hidden">
-      <div className="max-w-4xl mx-auto px-4 py-12 flex flex-col gap-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 flex flex-col gap-12">
 
         {/* Header */}
-        <div className="flex flex-col items-center text-center gap-3">
-          <h1 className="text-3xl font-bold" style={{ color: 'var(--foreground)' }}>
-            Simple, Transparent Pricing
+        <div className="flex flex-col items-center text-center gap-2">
+          <h1 className="text-2xl font-semibold" style={{ color: 'var(--foreground)' }}>
+            Pricing
           </h1>
-          <p className="text-base max-w-md" style={{ color: 'var(--muted-foreground)' }}>
+          <p className="text-sm max-w-sm" style={{ color: 'var(--muted-foreground)' }}>
             YtEduNotes is completely free to use. A Pro plan with cloud sync is coming soon.
           </p>
         </div>
 
         {/* Plans grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {plans.map(({ name, price, period, description, icon: Icon, highlight, cta, ctaTo, features, missing }) => (
             <div
               key={name}
               className={cn(
-                'relative flex flex-col rounded-2xl border p-6 gap-6',
-                highlight && 'ring-2'
+                'relative flex flex-col rounded-lg border p-5 gap-5',
+                highlight && 'ring-1'
               )}
               style={{
                 backgroundColor: 'var(--card)',
@@ -80,10 +80,10 @@ export default function Pricing() {
                 ...(highlight ? { '--tw-ring-color': 'var(--primary)' } as React.CSSProperties : {}),
               }}
             >
-              {/* Popular badge */}
+              {/* Coming soon badge */}
               {highlight && (
                 <div
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-semibold"
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-medium"
                   style={{ backgroundColor: 'var(--primary)', color: 'var(--primary-foreground)' }}
                 >
                   Coming Soon
@@ -91,29 +91,29 @@ export default function Pricing() {
               )}
 
               {/* Plan header */}
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2.5">
                   <div
-                    className="flex items-center justify-center w-8 h-8 rounded-lg"
+                    className="flex items-center justify-center w-7 h-7 rounded-md"
                     style={{ backgroundColor: 'var(--accent)' }}
                   >
-                    <Icon className="w-4 h-4" style={{ color: 'var(--primary)' }} aria-hidden="true" />
+                    <Icon className="w-3.5 h-3.5" style={{ color: 'var(--primary)' }} aria-hidden="true" />
                   </div>
-                  <span className="font-semibold text-base" style={{ color: 'var(--foreground)' }}>
+                  <span className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>
                     {name}
                   </span>
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-bold" style={{ color: 'var(--foreground)' }}>
+                  <span className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>
                     {price}
                   </span>
-                  <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
+                  <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
                     / {period}
                   </span>
                 </div>
 
-                <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
                   {description}
                 </p>
               </div>
@@ -121,21 +121,28 @@ export default function Pricing() {
               {/* CTA */}
               <Link to={ctaTo} className="w-full">
                 <Button
-                  className="w-full gap-2"
+                  className="w-full gap-2 h-9 text-sm"
                   variant={highlight ? 'default' : 'outline'}
                   disabled={highlight}
                 >
                   {cta}
-                  {!highlight && <ArrowRight className="w-4 h-4" aria-hidden="true" />}
+                  {!highlight && <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />}
                 </Button>
               </Link>
+
+              {/* Divider */}
+              <div
+                className="h-px"
+                style={{ backgroundColor: 'var(--border)' }}
+                aria-hidden="true"
+              />
 
               {/* Features */}
               <div className="flex flex-col gap-2">
                 {features.map((f) => (
-                  <div key={f} className="flex items-start gap-2 text-sm">
+                  <div key={f} className="flex items-start gap-2 text-xs">
                     <Check
-                      className="w-4 h-4 mt-0.5 shrink-0"
+                      className="w-3.5 h-3.5 mt-0.5 shrink-0"
                       style={{ color: 'var(--primary)' }}
                       aria-hidden="true"
                     />
@@ -143,8 +150,8 @@ export default function Pricing() {
                   </div>
                 ))}
                 {missing.map((f) => (
-                  <div key={f} className="flex items-start gap-2 text-sm opacity-40">
-                    <Check className="w-4 h-4 mt-0.5 shrink-0" aria-hidden="true" />
+                  <div key={f} className="flex items-start gap-2 text-xs opacity-35">
+                    <Check className="w-3.5 h-3.5 mt-0.5 shrink-0" aria-hidden="true" />
                     <span style={{ color: 'var(--muted-foreground)' }}>{f}</span>
                   </div>
                 ))}
@@ -155,7 +162,7 @@ export default function Pricing() {
 
         {/* FAQ note */}
         <div
-          className="rounded-xl border p-5 text-sm text-center"
+          className="rounded-lg border p-4 text-xs text-center"
           style={{ borderColor: 'var(--border)', color: 'var(--muted-foreground)' }}
         >
           Questions about pricing?{' '}

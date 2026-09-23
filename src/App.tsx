@@ -15,10 +15,11 @@ const Pricing = lazy(() => import('./pages/Pricing'));
 
 function PageSkeleton() {
   return (
-    <div className="flex flex-col gap-4 p-8 max-w-7xl mx-auto w-full animate-pulse">
-      <Skeleton className="h-10 w-1/3 rounded-lg" />
-      <Skeleton className="h-64 w-full rounded-lg" />
-      <Skeleton className="h-32 w-full rounded-lg" />
+    <div className="flex flex-col gap-3 p-6 max-w-3xl mx-auto w-full animate-pulse">
+      <Skeleton className="h-8 w-1/3 rounded-md" />
+      <Skeleton className="h-48 w-full rounded-md" />
+      <Skeleton className="h-24 w-full rounded-md" />
+      <Skeleton className="h-24 w-3/4 rounded-md" />
     </div>
   );
 }
