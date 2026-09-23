@@ -122,7 +122,7 @@ describe('Bug Condition Exploration Tests', () => {
     expect(screen.getByText(/Project Overview/i)).toBeTruthy();
     expect(screen.getByText(/Key Features/i)).toBeTruthy();
     expect(screen.getByText(/Tech Stack/i)).toBeTruthy();
-    expect(screen.getByText(/Creator/i)).toBeTruthy();
+    expect(screen.getByRole('heading', { name: /Creator/i })).toBeTruthy();
   });
 
   // ── Bug 8: Navbar should have no divider classes ─────────────────────────

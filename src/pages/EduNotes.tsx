@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { FileDown, Trash2, Loader2 } from 'lucide-react';
+import { FileDown, Trash2, Loader2, Sparkles, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useNoteStore } from '../store/useNotes';
 import { generatePDF } from '../lib/pdf';
@@ -11,6 +11,7 @@ import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription, DialogFooter,
 } from '../components/ui/dialog';
+import SpotlightGlow from '../components/ui/SpotlightGlow';
 
 export default function EduNotes() {
   const notes      = useNoteStore((s) => s.notes);
@@ -43,22 +44,37 @@ export default function EduNotes() {
 
   return (
     <>
-      {/* Full-height page: navbar is sticky, this fills the rest */}
       <main
-        className="flex-1 flex flex-col px-3 sm:px-5 lg:px-6 py-3 gap-3 max-w-7xl mx-auto w-full min-h-0"
+        className="flex-1 flex flex-col px-3 sm:px-5 lg:px-6 py-4 gap-3.5 max-w-7xl mx-auto w-full min-h-0 relative"
       >
-        {/* ── Action bar ── */}
-        <div className="flex items-center justify-between gap-2 flex-wrap shrink-0">
-          <h1 className="text-base font-medium" style={{ color: 'var(--foreground)' }}>
-            Study Session
-          </h1>
-          <div className="flex gap-2">
+        <SpotlightGlow showBlobs={false} />
+
+        {/* ── Action Bar ── */}
+        <div className="flex items-center justify-between gap-3 flex-wrap shrink-0 pb-1">
+          <div className="flex items-center gap-2">
+            <div
+              className="w-7 h-7 rounded-lg flex items-center justify-center text-white"
+              style={{ background: 'var(--signature-gradient)' }}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <h1 className="font-display font-bold text-base" style={{ color: 'var(--text-primary)' }}>
+                Active Study Workspace
+              </h1>
+              <p className="text-[11px] font-mono" style={{ color: 'var(--text-muted)' }}>
+                {notes.length} timestamped note{notes.length !== 1 ? 's' : ''} saved locally
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setShowClearDialog(true)}
               disabled={notes.length === 0}
-              className="gap-1.5 h-8 px-3 text-xs font-normal"
+              className="gap-1.5 h-9 px-3.5 text-xs font-medium rounded-xl transition-all"
             >
               <Trash2 className="w-3.5 h-3.5" />
               Clear Notes
@@ -67,30 +83,29 @@ export default function EduNotes() {
               size="sm"
               onClick={handleExportPDF}
               disabled={isExporting || notes.length === 0}
-              className="gap-1.5 h-8 px-3 text-xs font-normal"
+              className="gap-1.5 h-9 px-4 text-xs font-semibold rounded-xl text-white shadow-md transition-all hover:scale-105"
+              style={{ background: 'var(--signature-gradient)' }}
             >
               {isExporting
                 ? <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
                 : <FileDown className="w-3.5 h-3.5" />}
-              {isExporting ? 'Exporting…' : 'Export PDF'}
+              {isExporting ? 'Exporting PDF…' : 'Export PDF Guide'}
             </Button>
           </div>
         </div>
 
         {/* ── Two-column layout ── */}
-        {/* Theatre mode: video takes full width, notes panel hidden        */}
-        {/* Normal mode: 60/40 split on desktop, stacked on mobile          */}
-        <div className="flex flex-col md:flex-row gap-3 flex-1 min-h-0">
+        <div className="flex flex-col md:flex-row gap-4 flex-1 min-h-0 relative z-10">
 
           {/* Video column */}
-          <div className={theatreMode ? 'w-full' : 'w-full md:w-3/5 shrink-0'}>
+          <div className={theatreMode ? 'w-full' : 'w-full md:w-3/5 shrink-0 flex flex-col'}>
             <VideoPlayer onTheatreToggle={setTheatreMode} />
           </div>
 
-          {/* Notes column — hidden in theatre mode */}
+          {/* Notes column */}
           {!theatreMode && (
             <div
-              className="w-full md:w-2/5 flex flex-col min-h-0 max-h-[calc(100vh-130px)]"
+              className="w-full md:w-2/5 flex flex-col min-h-0 max-h-[calc(100vh-140px)]"
             >
               <NotesPanel />
             </div>
@@ -101,17 +116,22 @@ export default function EduNotes() {
 
       {/* ── Clear confirmation dialog ── */}
       <Dialog open={showClearDialog} onOpenChange={setShowClearDialog}>
-        <DialogContent>
+        <DialogContent
+          style={{
+            backgroundColor: 'var(--bg-surface)',
+            borderColor: 'var(--border-strong)',
+            color: 'var(--text-primary)',
+          }}
+        >
           <DialogHeader>
-            <DialogTitle>Clear all notes?</DialogTitle>
-            <DialogDescription>
-              All {notes.length} note{notes.length !== 1 ? 's' : ''} will be permanently deleted.
-              This cannot be undone.
+            <DialogTitle className="font-display">Clear all notes?</DialogTitle>
+            <DialogDescription style={{ color: 'var(--text-secondary)' }}>
+              All {notes.length} note{notes.length !== 1 ? 's' : ''} from this session will be permanently deleted from local storage.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" size="sm" onClick={() => setShowClearDialog(false)}>Cancel</Button>
-            <Button variant="destructive" size="sm" onClick={handleClearConfirm}>Clear All</Button>
+            <Button variant="destructive" size="sm" onClick={handleClearConfirm}>Clear All Notes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

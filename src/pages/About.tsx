@@ -1,6 +1,11 @@
-import { BookOpen, Clock, FileDown, Moon, ExternalLink } from 'lucide-react';
+import {
+  BookOpen, Clock, FileDown, Moon, ExternalLink, Code2, Sparkles,
+  Layers, Shield, Laptop, Globe, User
+} from 'lucide-react';
+import { motion } from 'framer-motion';
+import SpotlightGlow from '../components/ui/SpotlightGlow';
+import TiltCard from '../components/ui/TiltCard';
 
-// Inline SVG brand icons (lucide-react v1.8 doesn't include brand icons)
 function YouTubeIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -28,197 +33,316 @@ function LinkedInIcon({ className }: { className?: string }) {
   );
 }
 
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
 const techStack = [
-  { name: 'React 19',           desc: 'UI library'                },
-  { name: 'TypeScript',         desc: 'Type safety'               },
-  { name: 'Vite',               desc: 'Build tool'                },
-  { name: 'Tailwind CSS v4',    desc: 'Styling'                   },
-  { name: 'Zustand',            desc: 'State management'          },
-  { name: 'YouTube IFrame API', desc: 'Video player'              },
-  { name: 'jsPDF',              desc: 'PDF export'                },
-  { name: 'Vitest',             desc: 'Testing'                   },
-  { name: 'Radix UI',           desc: 'Accessible UI primitives'  },
+  { name: 'React 19',           category: 'UI Core',       desc: 'Concurrent React UI engine'   },
+  { name: 'TypeScript',         category: 'Types',         desc: 'Strict type verification'     },
+  { name: 'Vite 8',             category: 'Build',         desc: 'Instant HMR development'      },
+  { name: 'Tailwind CSS v4',    category: 'Design System', desc: 'CSS theme tokens & variants'  },
+  { name: 'Framer Motion',      category: 'Motion',        desc: 'Smooth physics & gestures'    },
+  { name: 'React Three Fiber',  category: '3D Graphics',   desc: 'Interactive WebGL canvas'     },
+  { name: 'Zustand',            category: 'State',         desc: 'Atomic state management'      },
+  { name: 'YouTube IFrame API', category: 'Media',         desc: 'Low-latency video controls'   },
+  { name: 'jsPDF',              category: 'Export',        desc: 'Vector study document engine' },
+  { name: 'Radix UI',           category: 'A11y',          desc: 'Headless accessible dialogs'  },
 ];
 
 const keyFeatures = [
   {
     icon: Clock,
-    title: 'Timestamped Notes',
-    desc: 'Every note you add is automatically tagged with the current video timestamp, so you can jump back to any moment instantly.',
+    title: 'Precise Timestamp Navigation',
+    desc: 'Each note is tagged with video playback coordinates down to the millisecond. Click any timestamp to rewind directly.',
+    accentColor: 'var(--accent-violet)',
+    bgAccent: 'rgba(124, 92, 252, 0.12)',
   },
   {
     icon: FileDown,
-    title: 'Export to PDF',
-    desc: 'Download all your notes as a clean, formatted PDF — perfect for revision or sharing with others.',
+    title: 'Instant PDF Study Guides',
+    desc: 'Generate clean, printable PDF documents with video metadata, chapter titles, and notes ready for offline revision.',
+    accentColor: 'var(--accent-cyan)',
+    bgAccent: 'rgba(74, 222, 222, 0.12)',
   },
   {
     icon: Moon,
-    title: 'Dark Mode',
-    desc: 'Easy on the eyes during long study sessions. Toggle between light and dark themes with one click.',
+    title: 'Adaptive Dual Palette',
+    desc: 'Fine-tuned light and dark modes with WCAG AA compliance, ensuring optimal contrast during midnight study marathons.',
+    accentColor: 'var(--accent-amber)',
+    bgAccent: 'rgba(255, 180, 84, 0.12)',
   },
   {
     icon: YouTubeIcon,
-    title: 'YouTube Integration',
-    desc: 'Paste any YouTube URL and the video loads instantly alongside your notes panel — no switching tabs.',
+    title: 'Native YouTube Controls',
+    desc: 'Seamlessly embeds YouTube educational talks alongside your workspace without sluggish external tab switches.',
+    accentColor: 'var(--success)',
+    bgAccent: 'rgba(52, 211, 153, 0.12)',
   },
 ];
 
 export default function About() {
   return (
-    <main className="flex-1 overflow-x-hidden">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 flex flex-col gap-14">
+    <main className="flex-1 overflow-x-hidden relative">
+      <SpotlightGlow showBlobs={true} />
 
-        {/* ── Project Overview ── */}
-        <section aria-labelledby="overview-heading">
-          <div className="flex items-center gap-3 mb-5">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 sm:py-20 flex flex-col gap-16 relative z-10">
+
+        {/* ── PROJECT OVERVIEW ── */}
+        <section aria-labelledby="overview-heading" className="flex flex-col gap-6">
+          <div className="flex items-center gap-3">
             <div
-              className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
-              style={{ backgroundColor: 'var(--accent)' }}
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md"
+              style={{ background: 'var(--signature-gradient)' }}
             >
-              <BookOpen className="w-4 h-4" style={{ color: 'var(--primary)' }} aria-hidden="true" />
+              <BookOpen className="w-5 h-5" />
             </div>
-            <h1
-              id="overview-heading"
-              className="text-xl font-semibold"
-              style={{ color: 'var(--foreground)' }}
-            >
-              Project Overview
-            </h1>
+            <div>
+              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-purple-400">
+                Philosophy & Purpose
+              </span>
+              <h1 id="overview-heading" className="text-display-2" style={{ color: 'var(--text-primary)' }}>
+                Project Overview
+              </h1>
+            </div>
           </div>
-          <div className="pl-11">
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-              <strong style={{ color: 'var(--foreground)' }}>YtEduNotes</strong> is a focused study tool that
-              combines YouTube video playback with a real-time note-taking panel. The idea is simple: instead of
-              pausing a video, switching to a notes app, typing something, and switching back — you do it all in
-              one place. Paste a YouTube link, watch the video, and add timestamped notes as you go. When you're
-              done, export everything to a PDF.
+
+          <div
+            className="p-6 sm:p-8 rounded-3xl border space-y-4 text-sm sm:text-base leading-relaxed"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            <p>
+              <strong style={{ color: 'var(--text-primary)' }}>YtEduNotes</strong> was designed around a simple insight:
+              watching YouTube educational lectures is one of the highest-yield ways to learn modern topics, but taking notes
+              is fragmented. Constantly toggling between browser tabs, pausing, writing in another app, and losing track of timestamps
+              destroys cognitive flow.
             </p>
-            <p className="text-sm leading-relaxed mt-3" style={{ color: 'var(--muted-foreground)' }}>
-              Built for students, self-learners, and anyone who watches educational content and wants to retain
-              more of what they learn.
+            <p>
+              YtEduNotes unifies video playback and structured note-taking into a single focused workspace. All notes are indexed
+              to the timeline, stored locally for privacy, and exportable as formatted PDFs with one click.
             </p>
           </div>
         </section>
 
-        {/* ── Key Features ── */}
+        {/* ── KEY FEATURES (Distinct Accents) ── */}
         <section aria-labelledby="features-heading">
-          <h2
-            id="features-heading"
-            className="text-xl font-semibold mb-6"
-            style={{ color: 'var(--foreground)' }}
-          >
-            Key Features
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {keyFeatures.map(({ icon: Icon, title, desc }) => (
-              <div
-                key={title}
-                className="flex gap-4 p-4 rounded-lg border"
-                style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
-              >
-                <div
-                  className="flex items-center justify-center w-8 h-8 rounded-md shrink-0 mt-0.5"
-                  style={{ backgroundColor: 'var(--accent)' }}
+          <div className="flex items-center gap-2 mb-6">
+            <Sparkles className="w-5 h-5 text-amber-400" />
+            <h2 id="features-heading" className="font-display font-bold text-2xl" style={{ color: 'var(--text-primary)' }}>
+              Key Features
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {keyFeatures.map((feat) => {
+              const Icon = feat.icon;
+              return (
+                <TiltCard
+                  key={feat.title}
+                  glowColor={feat.accentColor}
+                  className="p-6 rounded-2xl border flex gap-4 items-start"
+                  style={{
+                    backgroundColor: 'var(--bg-surface)',
+                    borderColor: 'var(--border-subtle)',
+                  }}
                 >
-                  <Icon className="w-4 h-4" style={{ color: 'var(--primary)' }} aria-hidden="true" />
-                </div>
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
+                    style={{
+                      backgroundColor: feat.bgAccent,
+                      color: feat.accentColor,
+                      border: `1px solid ${feat.accentColor}33`,
+                    }}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-display font-bold text-base mb-1.5" style={{ color: 'var(--text-primary)' }}>
+                      {feat.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                      {feat.desc}
+                    </p>
+                  </div>
+                </TiltCard>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ── TECH STACK ── */}
+        <section aria-labelledby="tech-heading">
+          <div className="flex items-center gap-2 mb-6">
+            <Code2 className="w-5 h-5 text-cyan-400" />
+            <h2 id="tech-heading" className="font-display font-bold text-2xl" style={{ color: 'var(--text-primary)' }}>
+              Modern Tech Stack
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {techStack.map((tech, idx) => (
+              <motion.div
+                key={tech.name}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: idx * 0.04 }}
+                className="p-3.5 rounded-xl border flex flex-col justify-between gap-1 transition-all hover:scale-105"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                }}
+              >
+                <span
+                  className="text-[10px] font-mono font-bold uppercase"
+                  style={{ color: 'var(--accent-violet)' }}
+                >
+                  {tech.category}
+                </span>
+                <span className="font-display font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
+                  {tech.name}
+                </span>
+                <span className="text-[11px] leading-tight" style={{ color: 'var(--text-muted)' }}>
+                  {tech.desc}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── CREATOR PROFILE ── */}
+        <section aria-labelledby="creator-heading">
+          <div className="flex items-center gap-2 mb-6">
+            <User className="w-5 h-5 text-purple-400" />
+            <h2 id="creator-heading" className="font-display font-bold text-2xl" style={{ color: 'var(--text-primary)' }}>
+              Creator
+            </h2>
+          </div>
+
+          <TiltCard
+            glowColor="var(--accent-violet)"
+            className="p-6 sm:p-8 rounded-3xl border flex flex-col sm:flex-row items-start sm:items-center gap-6"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)',
+            }}
+          >
+            {/* Custom Illustrated Developer Avatar */}
+            <div className="relative shrink-0">
+              <div
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex items-center justify-center shadow-lg border-2"
+                style={{
+                  background: 'linear-gradient(135deg, #7C5CFC 0%, #4ADEDE 100%)',
+                  borderColor: 'var(--border-strong)',
+                }}
+              >
+                {/* SVG Illustrated Avatar with Tech Vibe */}
+                <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+                  <circle cx="50" cy="50" r="48" fill="#111116" />
+                  <path
+                    d="M30 85 C30 65 70 65 70 85"
+                    fill="#7C5CFC"
+                    opacity="0.85"
+                  />
+                  <circle cx="50" cy="45" r="20" fill="#F5F5F7" />
+                  {/* Glasses */}
+                  <rect x="36" y="42" width="11" height="8" rx="2" stroke="#111116" strokeWidth="2.5" fill="#4ADEDE" fillOpacity="0.4" />
+                  <rect x="53" y="42" width="11" height="8" rx="2" stroke="#111116" strokeWidth="2.5" fill="#4ADEDE" fillOpacity="0.4" />
+                  <line x1="47" y1="46" x2="53" y2="46" stroke="#111116" strokeWidth="2.5" />
+                  {/* Smile */}
+                  <path d="M44 56 Q50 61 56 56" stroke="#111116" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </div>
+              <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-400 border-2 border-[var(--bg-surface)]" title="Active developer" />
+            </div>
+
+            <div className="flex flex-col gap-2 flex-1">
+              <div className="flex items-center justify-between flex-wrap gap-2">
                 <div>
-                  <h3 className="font-medium text-sm mb-1" style={{ color: 'var(--foreground)' }}>
-                    {title}
+                  <h3 className="font-display font-bold text-lg" style={{ color: 'var(--text-primary)' }}>
+                    Vishal Sanam
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                    {desc}
+                  <p className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+                    Frontend Engineer · Thane, Maharashtra, India
                   </p>
                 </div>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-xs font-mono border"
+                  style={{
+                    backgroundColor: 'var(--bg-surface-2)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--accent-violet)',
+                  }}
+                >
+                  Creator & Lead
+                </span>
               </div>
-            ))}
-          </div>
-        </section>
 
-        {/* ── Tech Stack ── */}
-        <section aria-labelledby="tech-heading">
-          <h2
-            id="tech-heading"
-            className="text-xl font-semibold mb-6"
-            style={{ color: 'var(--foreground)' }}
-          >
-            Tech Stack
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {techStack.map(({ name, desc }) => (
-              <div
-                key={name}
-                className="flex flex-col px-3 py-2.5 rounded-lg border text-sm"
-                style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}
-              >
-                <span className="font-medium text-xs" style={{ color: 'var(--foreground)' }}>{name}</span>
-                <span className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                Passionate about building fast, resilient productivity software that removes friction from learning.
+                YtEduNotes is crafted to help students absorb complex topics effortlessly.
+              </p>
 
-        {/* ── Creator ── */}
-        <section aria-labelledby="creator-heading">
-          <h2
-            id="creator-heading"
-            className="text-xl font-semibold mb-6"
-            style={{ color: 'var(--foreground)' }}
-          >
-            Creator
-          </h2>
-          <div
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-5 p-5 rounded-lg border"
-            style={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)' }}
-          >
-            {/* Avatar */}
-            <div
-              className="flex items-center justify-center w-12 h-12 rounded-full text-base font-semibold shrink-0"
-              style={{ backgroundColor: 'var(--accent)', color: 'var(--primary)' }}
-              aria-hidden="true"
-            >
-              V
-            </div>
-            <div className="flex flex-col gap-1 flex-1">
-              <p className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>
-                Vishal
-              </p>
-              <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
-                Frontend Developer · Thane, Maharashtra, India
-              </p>
-              <p className="text-sm mt-1.5 leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                Passionate about building tools that make learning more effective. YtEduNotes was built to
-                solve a personal frustration — constantly switching between YouTube and a notes app while
-                studying.
-              </p>
-              <div className="flex items-center gap-4 mt-3">
+              {/* Social Links Row */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <a
                   href="https://github.com/web-dev-vishal/Yt_Notes_with_Video"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="GitHub repository"
-                  className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-70"
-                  style={{ color: 'var(--primary)' }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all hover:scale-105"
+                  style={{
+                    backgroundColor: 'var(--bg-surface-2)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--accent-violet)',
+                  }}
                 >
                   <GitHubIcon className="w-3.5 h-3.5" />
-                  GitHub
-                  <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                  GitHub Repository
+                  <ExternalLink className="w-3 h-3 opacity-60" />
                 </a>
+
                 <a
                   href="https://www.linkedin.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="LinkedIn profile"
-                  className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-70"
-                  style={{ color: 'var(--primary)' }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all hover:scale-105"
+                  style={{
+                    backgroundColor: 'var(--bg-surface-2)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--accent-cyan)',
+                  }}
                 >
                   <LinkedInIcon className="w-3.5 h-3.5" />
                   LinkedIn
-                  <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                  <ExternalLink className="w-3 h-3 opacity-60" />
+                </a>
+
+                <a
+                  href="https://twitter.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all hover:scale-105"
+                  style={{
+                    backgroundColor: 'var(--bg-surface-2)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--accent-amber)',
+                  }}
+                >
+                  <XIcon className="w-3.5 h-3.5" />
+                  Twitter/X
+                  <ExternalLink className="w-3 h-3 opacity-60" />
                 </a>
               </div>
             </div>
-          </div>
+          </TiltCard>
         </section>
 
       </div>
