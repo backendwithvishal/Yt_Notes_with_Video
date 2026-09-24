@@ -31,12 +31,10 @@ export default function Navbar() {
 
   return (
     <header
-      className="sticky top-0 z-50 w-full border-b transition-colors duration-300"
+      className="sticky top-0 z-50 w-full transition-colors duration-300 bg-transparent border-b border-transparent"
       style={{
-        backgroundColor: 'color-mix(in srgb, var(--bg-base) 82%, transparent)',
-        borderColor: 'var(--border-subtle)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -53,14 +53,12 @@ export default function ProductMockup() {
   return (
     <div ref={containerRef} className="w-full max-w-5xl mx-auto px-2 sm:px-4 py-8 perspective-[1400px]">
       <motion.div
+        className="relative rounded-2xl border shadow-2xl overflow-hidden backdrop-blur-xl transition-shadow duration-500"
         style={{
           rotateX,
           scale,
           y,
           transformStyle: 'preserve-3d',
-        }}
-        className="relative rounded-2xl border shadow-2xl overflow-hidden backdrop-blur-xl transition-shadow duration-500"
-        style={{
           backgroundColor: 'var(--bg-surface)',
           borderColor: 'var(--border-strong)',
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 40px -10px var(--signature-glow)',
